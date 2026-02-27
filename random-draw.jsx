@@ -23,7 +23,7 @@ function useSounds() {
       synthRef.current = new Tone.Synth({
         oscillator: { type: "triangle" },
         envelope: { attack: 0.01, decay: 0.15, sustain: 0.05, release: 0.3 },
-        volume: -12,
+        volume: -20,
       }).toDestination();
     }
     return synthRef.current;
@@ -248,7 +248,7 @@ export default function RandomDraw() {
         setTimeout(() => {
           if (soundOnRef.current) {
             sounds.playEliminate();
-            speak(String(picked));
+            speak(`Eliminate ${picked}`);
           }
 
           setDrawn((prev) => [...prev, picked]);
