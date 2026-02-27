@@ -78,6 +78,14 @@ function useSounds() {
   return { init, playTick, playReveal, playEliminate, playWinner, playStart };
 }
 
+function unlockSpeech() {
+  if (!("speechSynthesis" in window)) return;
+  const utter = new SpeechSynthesisUtterance("");
+  utter.volume = 0;
+  utter.rate = 10;
+  window.speechSynthesis.speak(utter);
+}
+
 function speak(text) {
   if (!("speechSynthesis" in window)) return;
   window.speechSynthesis.cancel();
@@ -146,7 +154,10 @@ function SoundToggle({ soundOn, setSoundOn, onInit }) {
   return (
     <button
       onClick={async () => {
-        if (!soundOn) await onInit();
+        if (!soundOn) {
+          await onInit();
+          unlockSpeech();
+        }
         setSoundOn(!soundOn);
       }}
       style={{
@@ -212,7 +223,10 @@ export default function RandomDraw() {
   const drawNumber = async () => {
     if (remaining.length <= 1 || isSpinning) return;
 
-    if (soundOnRef.current) await sounds.init();
+    if (soundOnRef.current) {
+      await sounds.init();
+      unlockSpeech();
+    }
 
     setIsSpinning(true);
     let ticks = 0;
